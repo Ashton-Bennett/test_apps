@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useField = (type) => {
+const useField = (type) => {
   const [value, setValue] = useState("");
 
   const onChange = (event) => {
@@ -11,10 +11,7 @@ export const useField = (type) => {
     setValue("");
   };
 
-  return {
-    type,
-    value,
-    onChange,
-    onresethandler,
-  };
+  return [{ type, value, onChange }, onresethandler];
 };
+
+export default useField;

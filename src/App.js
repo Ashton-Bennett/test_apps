@@ -1,26 +1,26 @@
 import "./App.css";
-import { useField } from "./hooks/useField";
+import useField from "./hooks/useField";
 import { useState } from "react";
 
 function App() {
   //Once the form is submitted the data from the form will be added to members array.
   const [members, setMembers] = useState([]);
-  const username = useField();
-  const password = useField("password");
-  const email = useField("email");
-  const url = useField("url");
-  const birthdate = useField("date");
+  const [username, usernameResetHandler] = useField();
+  const [password, passwordResetHandler] = useField("password");
+  const [email, emailResetHandler] = useField("email");
+  const [url, urlResetHandler] = useField("url");
+  const [birthdate, birthDateHandler] = useField("date");
 
   const clearForm = (event) => {
     event.preventDefault();
-    username.onresethandler();
-    password.onresethandler();
-    email.onresethandler();
-    url.onresethandler();
-    birthdate.onresethandler();
+    usernameResetHandler();
+    passwordResetHandler();
+    emailResetHandler();
+    urlResetHandler();
+    birthDateHandler();
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     const memberObject = {
@@ -30,10 +30,11 @@ function App() {
       url: url.value,
       birthdate: birthdate.value,
     };
-    await setMembers([...members, memberObject]);
-    console.log("state of members", members);
+    setMembers([...members, memberObject]);
+
     clearForm(event);
   };
+
   return (
     <div className="App">
       <header className="header">
@@ -77,6 +78,10 @@ function App() {
         <div>
           state of user's b day: <span>{birthdate.value}</span>
         </div>
+        <h1>Submissions:</h1>
+        {members.map((member) => (
+          <li key={member.username}>{Object.values(member)}</li>
+        ))}
       </div>
     </div>
   );
