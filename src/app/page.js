@@ -1,91 +1,64 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+"use client";
+import { Inter } from "@next/font/google";
+import { createContext, useState } from "react";
+import styles from "./page.module.css";
+import Header from "../../components/Header";
+import Component from "../../components/Component";
 
-const inter = Inter({ subsets: ['latin'] })
-
+export const inter = Inter({ subsets: ["latin"] });
+export const UserContext = createContext(null);
 export default function Home() {
+  const [user, setUser] = useState("");
+
+  const handleInputChange = (event) => {
+    event.preventDefault();
+    setUser(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // setUser(event.target.value);
+    console.log("USER LOGGED IN", user);
+  };
+
+  console.log("USER LOG OUTSIDE E HANDLES:", user);
+
+  const handleLogout = () => {
+    setUser("");
+    console.log("USER LOGGED OUT", user);
+  };
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <UserContext.Provider value={user}>
+      <main className={styles.main}>
+        <div className={styles.description}>
+          <p>
+            <Header />
+          </p>
+        </div>
+        <div className={styles.center}>
+          <form onSubmit={handleSubmit}>
+            <label>Username:</label>
+            <input
+              type="text"
+              value={user}
+              placeholder="type any name here"
+              onChange={handleInputChange}
             />
-          </a>
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              style={{ margin: ".5em" }}
+            >
+              Login
+            </button>
+          </form>
+          <button onClick={handleLogout}>Logout</button>
         </div>
-      </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
+        <div className={styles.grid}>
+          <Component />
         </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+      </main>
+    </UserContext.Provider>
+  );
 }
